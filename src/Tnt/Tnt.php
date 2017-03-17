@@ -23,42 +23,6 @@ class Tnt extends PluginBase implements Listener {
         $this->getLogger()->info(TextFormat::BLUE ."===============");
             $this->getServer ()->getPluginManager ()->registerEvents ( $this, $this );
     }
-            public function onPacketReceived(DataPacketReceiveEvent $event){
-            $pk = $event->getPacket();
-            $player = $event->getPlayer();
-            if($pk instanceof UseItemPacket and $pk->face === 0xff) {
-            $item = $player->getInventory()->getItemInHand();
-            if($item->getId() == 369){
-                $mot = (new Random())->nextSignedFloat() * M_PI * 2;
-			$tnt = Entity::createEntity("PrimedTNT", $player->getLevel()->getChunk($player->x >> 4, $player->z >> 4), new Compound("", [
-				"Pos" => new EnumTag("Pos", [
-					new DoubleTag("", $player->x + 0.5),
-					new DoubleTag("", $player->y),
-					new DoubleTag("", $player->z + 0.5)
-				]),
-				"Motion" => new EnumTag("Motion", [
-					new DoubleTag("", -sin($mot) * 0.02),
-					new DoubleTag("", 0.2),
-					new DoubleTag("", -cos($mot) * 0.02)
-				]),
-				"Rotation" => new EnumTag("Rotation", [
-					new FloatTag("", 0),
-					new FloatTag("", 0)
-                                    
-				]),
-				"Fuse" => new ByteTag("Fuse", 100)
-			]));
-			$tnt->spawnToAll();
-                        $player->getLevel()->addSound(new AnviluseSound($player),array($player));
-			return true;
-		}
-            
-        }
-        
-               
-            }
-            
-    
           
         public function place(BlockPlaceEvent $place){
             $block = $place->getBlock();
@@ -102,13 +66,22 @@ class Tnt extends PluginBase implements Listener {
             
   
          if($player instanceof Player && $event->getCause() === EntityDamageEvent::CAUSE_ENTITY_EXPLOSION){
-         	switch(mt_rand(1,2)){
+         	switch(mt_rand(1,5)){
          		case 1:
             $event->setDamage(10);
             break;
             case 2:
+             $event->setDamage(9);
+		break;
+            case 3:
              $event->setDamage(8);	
-             break;
+             	break;
+	    case 4:
+	     $event->setDamage(7);
+		break;
+	    case 5:
+	     $event->setDamage(5);
+		break;
          	}
         }
     }
